@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻譯分析回饋單114-2</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 500px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: auto; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #34495e; padding-bottom: 10px; margin-top: 0; text-align: center; }
+        .note { font-size: 0.9em; color: #555; background: #fff3f3; padding: 10px; border-radius: 6px; border-left: 4px solid #e74c3c; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #2c3e50; }
+        input[type="text"], input[type="date"], textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .radio-container { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 8px; }
+        .radio-item { display: flex; align-items: center; gap: 5px; }
+        button { width: 100%; padding: 15px; background-color: #34495e; color: white; border: none; border-radius: 6px; margin-top: 30px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+        button:hover { background-color: #1a252f; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>翻譯分析回饋單 Ⅰ</h2>
+    <div class="note">
+        授課教師：王憶雲 <br>
+        ※ 本單計入平時成績，至少需完成四次。如遇該週課堂請假，註明該週為請假即可。
+    </div>
+
+    <form id="feedbackForm">
+        <label>姓名</label>
+        <input type="text" name="name" required placeholder="您的姓名">
+
+        <label>學號</label>
+        <input type="text" name="studentId" required placeholder="您的學號">
+
+        <label>本次課堂日期</label>
+        <input type="date" name="date" required>
+
+        <label>本次回饋針對哪一組？</label>
+        <div class="radio-container">
+            <div class="radio-item"><input type="radio" name="targetGroup" value="第一組" required> 第一組</div>
+            <div class="radio-item"><input type="radio" name="targetGroup" value="第二組"> 第二組</div>
+            <div class="radio-item"><input type="radio" name="targetGroup" value="第三組"> 第三組</div>
+            <div class="radio-item"><input type="radio" name="targetGroup" value="第四組"> 第四組</div>
+        </div>
+
+        <label>您本次是否為報告組別？</label>
+        <div class="radio-container">
+            <div class="radio-item"><input type="radio" name="isPresenter" value="是" required> 是</div>
+            <div class="radio-item"><input type="radio" name="isPresenter" value="否"> 否</div>
+        </div>
+
+        <label>本次課堂是否發言？</label>
+        <div class="radio-container">
+            <div class="radio-item"><input type="radio" name="hasSpoken" value="是" required> 是</div>
+            <div class="radio-item"><input type="radio" name="hasSpoken" value="否"> 否</div>
+        </div>
+
+        <label>我對本周報告內容的想法</label>
+        <textarea name="feedback" rows="6" required placeholder="請盡量具體，有發言的同學可以直接記下發言內容..."></textarea>
+
+        <button type="submit" id="submitBtn">提交回饋單</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('feedbackForm');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzPmZfRfdBp6D_u2j0px2yUr66vsuQRqdCG7h0Mt_MOKIQNJQnrCDSoWoFDKJ5un4hjmQ/exec'; // 請在此處替換您的 GAS 部署網址
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = '傳送中...';
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                alert('提交成功！辛苦了。');
+                form.reset();
+                btn.disabled = false;
+                btn.innerText = '提交回饋單';
+            })
+            .catch(error => {
+                alert('提交失敗，請檢查網路連線。');
+                console.error('Error!', error.message);
+                btn.disabled = false;
+                btn.innerText = '提交回饋單';
+            });
+    });
+</script>
+
+</body>
+</html>
